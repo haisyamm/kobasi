@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController; //Mendaftarkan controller yang akan digunakan
+use App\Http\Controllers\PositionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +14,6 @@ use App\Http\Controllers\UserController; //Mendaftarkan controller yang akan dig
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 
 
 Route::get('register', [UserController::class, 'register'])->name('register');
@@ -29,4 +29,7 @@ Route::middleware('auth')->group(
         Route::get('password', [UserController::class, 'password'])->name('password');
         Route::post('password', [UserController::class, 'password_action'])->name('password.action');
         Route::get('logout', [UserController::class, 'logout'])->name('logout');
+
+        //route position
+        Route::resource('positions', PositionController::class);
     });
