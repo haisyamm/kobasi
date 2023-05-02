@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController; //Mendaftarkan controller yang akan digunakan
 use App\Http\Controllers\PositionController;
+use App\Http\Controllers\DepartementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,4 +33,6 @@ Route::middleware('auth')->group(
 
         //route position
         Route::resource('positions', PositionController::class);
+
+        Route::resource('departements', DepartementController::class);
     });
