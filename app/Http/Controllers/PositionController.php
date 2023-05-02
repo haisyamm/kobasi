@@ -39,26 +39,27 @@ class PositionController extends Controller
 
     public function edit(Positions $position)
     {
-        return view('positions.edit',compact('position'));
+        $title = "Edit Data Position";
+        return view('positions.edit',compact('position' , 'title'));
     }
 
     public function update(Request $request, Positions $position)
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'required',
-            'address' => 'required',
+            'keterangan' => 'required',
+            'alias' => 'required',
         ]);
         
-        $company->fill($request->post())->save();
+        $position->fill($request->post())->save();
 
-        return redirect()->route('positions.index')->with('success','Company Has Been updated successfully');
+        return redirect()->route('positions.index')->with('success','Position Has Been updated successfully');
     }
 
     public function destroy(Positions $position)
     {
-        $company->delete();
-        return redirect()->route('positions.index')->with('success','Company has been deleted successfully');
+        $position->delete();
+        return redirect()->route('positions.index')->with('success','Position has been deleted successfully');
     }
 
 }
