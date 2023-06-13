@@ -1,52 +1,59 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Positions;
+use App\Models\Product;
 use Illuminate\Http\Request;
-use App\Exports\ExportPositions;
-use Maatwebsite\Excel\Facades\Excel;
 
-
-class PositionController extends Controller
+class ProductController extends Controller
 {
+    public function autocomplete(Request $request)
+    {
+        $data = Product::select("name as value", "id")
+                    ->where('name', 'LIKE', '%'. $request->get('search'). '%')
+                    ->get();
+    
+        return response()->json($data);
+    }
+
+    public function show(Product $product)
+    { 
+        return response()->json($product);
+    }
+
     public function index()
     {   
-        $title = "Data Position";
-        $positions = Positions::orderBy('id','asc')->paginate(5);
+        $title = "Data Product";
+        $products = Product::orderBy('id','asc')->paginate(5);
         return view('positions.index', compact(['positions' , 'title']));
     }
 
     public function create()
     {
-        $title = "Tambah Data Position";
+        $title = "Tambah Data Product";
         return view('positions.create', compact('title'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'keterangan',
-            'alias',
+            'no_trx' => 'required'
         ]);
+
+        var_dump($request);
+        die;
         
-        Positions::create($request->post());
+        Product::create($request->post());
 
         return redirect()->route('positions.index')->with('success','Position has been created successfully.');
     }
 
-    public function show(Positions $position)
+    public function edit(Product $product)
     {
-        return view('positions.show',compact('position'));
-    }
-
-    public function edit(Positions $position)
-    {
-        $title = "Edit Data Position";
+        $title = "Edit Data Product";
         return view('positions.edit',compact('position' , 'title'));
     }
 
-    public function update(Request $request, Positions $position)
+    public function update(Request $request, Product $product)
     {
         $request->validate([
             'name' => 'required',
@@ -54,19 +61,15 @@ class PositionController extends Controller
             'alias' => 'required',
         ]);
         
-        $position->fill($request->post())->save();
+        $product->fill($request->post())->save();
 
         return redirect()->route('positions.index')->with('success','Position Has Been updated successfully');
     }
 
-    public function destroy(Positions $position)
+    public function destroy(Product $product)
     {
-        $position->delete();
+        $product->delete();
         return redirect()->route('positions.index')->with('success','Position has been deleted successfully');
     }
-
-    public function exportExcel(){
-        return Excel::download(new ExportPositions, 'Positions.xlsx');
-    }
-
+    
 }

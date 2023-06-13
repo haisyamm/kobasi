@@ -12,7 +12,7 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-body">
-                <h1 class="card-title">@yield('title', $title)</h1>
+                <h1 class="card-title text-center">@yield('title', $title)</h1>
                 @yield('content')
             </div>
         </div>
