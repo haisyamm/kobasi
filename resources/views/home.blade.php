@@ -1,32 +1,30 @@
 @extends('app')
 @section('content')
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td colspan="2">Larry the Bird</td>
-      <td>@twitter</td>
-    </tr>
-  </tbody>
-</table>
+<select class="sel" name="year">
+    <option value="2023">Year 2023</option>
+    <option value="2022">Year 2022</option>
+    <option value="2021">Year 2021</option>
+    <option value="2020">Year 2020</option>
+    <option value="2019">Year 2019</option>
+    <option value="2018">Year 2018</option>
+    <option value="2017">Year 2017</option>
+    <option value="2016">Year 2016</option>
+</select>
+
+<div style="width: 80%;margin: 0 auto;">
+    {!! $chart->container() !!}
+</div>
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>
+
+{!! $chart->script() !!}
+
+<script type="text/javascript">
+    var original_api_url = {{ $chart->id }}_api_url;
+    $(".sel").change(function(){
+        var year = $(this).val();
+        {{ $chart->id }}_refresh(original_api_url + "?year="+year);
+    });
+</script>
 @endsection

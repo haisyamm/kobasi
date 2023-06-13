@@ -42,6 +42,8 @@ Route::middleware('auth')->group(
         [PositionController::class, 'exportExcel'])
         ->name('positions.exportExcel');
         Route::resource('rabs', RABController::class);
+        Route::get('home', [RABController::class, 'chartLine']);
+        Route::get('chart-line-ajax', [RABController::class, 'chartLineAjax'])->name('rabs.chartLineAjax');
         Route::get('search/product', [ProductController::class, 'autocomplete'])->name('search.product');
         Route::resource('products', ProductController::class);
     });

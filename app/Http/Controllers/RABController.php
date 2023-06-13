@@ -5,6 +5,7 @@ use App\Models\User;
 use App\Models\RAB;
 use App\Models\RABDetail;
 use Illuminate\Http\Request;
+use App\Charts\RabLineChart;
 
 class RABController extends Controller
 {
@@ -93,6 +94,39 @@ class RABController extends Controller
     {
         $rab->delete();
         return redirect()->route('rabs.index')->with('success','Departement has been deleted successfully');
+    }
+
+    public function chartLine()
+    {
+        $api = url(route('rabs.chartLineAjax'));
+   
+        $chart = new RabLineChart;
+        $chart->labels(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])->load($api);
+        $title = "Chart Ajax";
+        return view('home', compact('chart', 'title'));
+    }
+   
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    public function chartLineAjax(Request $request)
+    {
+        $year = $request->has('year') ? $request->year : date('Y');
+        $rabs = RAB::select(\DB::raw("COUNT(*) as count"))
+                    ->whereYear('tgl_rab', $year)
+                    ->groupBy(\DB::raw("Month(tgl_rab)"))
+                    ->pluck('count');
+  
+        $chart = new RabLineChart;
+  
+        $chart->dataset('New RAB Register Chart', 'bar', $rabs)->options([
+                    'fill' => 'true',
+                    'borderColor' => '#51C1C0'
+                ]);
+  
+        return $chart->api();
     }
 
 }
